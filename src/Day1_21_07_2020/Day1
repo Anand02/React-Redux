@@ -1,0 +1,237 @@
+Basic Example:
+import { createStore } from 'redux';
+
+
+// This is a reducer , a pure function with (state , action)=> state 
+signature.It describes how an action transforms the state into the next state.
+
+
+function counter(state=0,action){
+    switch (action.type){
+        case 'INCREMENT':
+            return state + 1
+        case 'DECREMENT':
+            return state - 1
+        default:
+            rerurn state
+    }
+}
+
+// holds state of our APP
+let store = createStore(counter)
+
+//we can use subscribe to update the UI in response to state chnages.
+store.subscribe( () => console.log(store.getState()))
+
+
+// The only way to mutate the internal state is to dispatch an action
+store.dispatch({ type: 'INCREMENT' })
+
+//1
+
+store.dispatch({ type: 'DECREMENT' })
+
+//2
+
+---------------------------------------------------------------------
+
+HOOKS:
+
+React Hooks are in-built functions that allow React Developers to use 
+state and life cycle methods inside functional components.
+
+Benefits:
+
+1. Improved code reuse
+2. Flexibility in moving up and down the components tree
+
+** Reusing stateful logic between components is difficult:
+==> With Hooks you can reuse logic between your components without 
+changing their architecture or structure.
+
+** Complex components can be difficult to understand
+==>When component become larger and carry out many operations , It
+becomes difficult to understand in the long run.
+Hooks solve this by allowing you separate a particular single component into 
+various smaller functions based upon what pieces of this separated 
+component are related 
+
+**Classes are quite confusing
+In javascript this works differs from other languages . React Hooks solves 
+this problem by allowing developers to use the best of React features without 
+having to use Classes
+
+---------------------------------------------------------------------------
+Strict Rules:
+1. Make sure to not use Hooks inside loops , conditions  or nested functions
+2. Only use Hooks from inside React Functions.
+
+There are 10 in-built hooks that was shipped with React 16.8, but Basic
+commonly used hooks include.
+1.useState()
+2.useEffect()
+3.useContext()
+4.useReducer()
+
+1.useState(): This hooks allows to update , handle  and manipulate
+state inside functional components without needing to convert it to a 
+class component.
+Example:
+
+function App(){
+    const[age, setAge] = useState(19);
+
+    const handleClick = () => setAge(age+1)
+
+    return 
+    <div>
+        <div>
+            I am {age} Years Old
+        </div>
+        <button onClick={handleClick}> Increase </button>
+    </div>
+}
+
+In this example useState() hook receives an initial state as an argument 
+and then returns use if array destructring (UNPACK VALUES FROM ARRAYS OR PROPERTIES FROM OBJECTS 
+Example: 
+var x,y;
+[x,y] =[10,20])in Javascript
+
+The first varible in useState is the actual state , while the second 
+variable is a function that is meant for updating the state by providing a new state.
+
+----------------------------------------------------------------------------------------------------
+
+Class Component VS Functional Component state
+
+Class App extends React.Component{
+    construvtor(props){
+        super(props);
+        this.state={
+            age : 19
+        }
+
+        this.handleClick= this.handleClick.bind(this);
+
+    }
+
+    handleClick(){
+        this.setState({
+            age : age + 1
+        })
+    }
+
+
+    render(){
+
+        return <div>
+        I am {this.state.age} Year Old
+        <button onClick={this.handleClick()}>ClickME</button>
+        </div>
+    }
+}
+
+SAME THING IN FUNCTIONAL WITHOUT CLASS Component
+
+function App(){
+
+    const [ age , setAge ] = useState(19);
+
+    const handleClick = () => setAge(age+1)
+
+    return 
+    <div>
+    I am {age} Years Old.
+    <div>
+        <button onClick={handleClick}>Increase my age! </button>
+    </div>
+    </div>
+}
+
+==============================================================================================
+useEffect():In functional components , effects like mutations , subscriptions , timers,logging
+and other effects are not allowed to be placed inside a functional component because doing so would 
+lead to a lot of inconsistencies when UI is rendered and also confusing bugs
+
+1. useEffect works like mixture of both componentDidMount and componentDidUpadte nd Unmounting
+it will be called when render happens.
+effects are exceuted mainly after the render has been completed and also certain values chnages
+
+so if not to render on change value we have option like giving conditional rendering 
+example as below
+
+we use empty array , so it will prevent an update 
+
+import React , {useState, useEffect} from 'react';
+
+function App(){
+    const [name, setName] = useState({fName:'name', surname: 'surname'});
+    const [title, setTitle] = useState('BIO');
+
+    useEffect(() => {
+        setName({fName:'anand',surname:'gadag'})
+        setTitle({'anandgadag'})
+    }, [])
+
+    return (
+        <div>
+            <h1> Title: {title}</h1>
+            <h3> Name : {name.fName}</h3>
+            <h3> Surname: {name.surname}</h3>
+        </div>
+    );
+};
+export default App
+
+------------------------------------------------------------------------------------------------
+useContext():
+
+it a way to share data deeply throughtout your app without the need to manually pass your app props
+down through various levels .
+
+
+The useContext hooks accepts a context object i.e the value that is returned from
+React.createContext and then it returns the current context value for that context
+
+This hook gives functional components easy access to your React app context.
+ Before the useContext hook was introduced you would need to set up a contextType or a <Consumer> 
+ to access your global state passed down from some provider in a class component.
+
+ import React,{ useContext } from 'react'
+
+ const NumberContext = React.createContext();
+ function App(){
+     return(
+        <NumberContext.Provider value={45}>
+
+            <div>
+                <Display />
+            </div>
+
+        </NumberContext.Provider>
+     )
+ }
+
+ function Display(){
+     const value = useContext(NumberContext);
+     return <div> The answer is {value} </div>
+   
+ }
+
+ ---------------------------------------------------------------------------------
+ useReducer()
+ The useReducer hook is used for handling complex states and transitions in state. 
+ It takes in a reducer function and also an initial state input; then, it returns the current state
+  and also a dispatch function as output by the means of array destructuring.
+
+  const [state, dispatch] = useReducer(reducer, initialArg, init);
+
+It is sort of an alternative to the useState hook; it is usually preferable to useState when you 
+have complex state logic that has to do with multiple sub-values or when the next state is dependent on the previous one.
+
+
+
+
+
+
