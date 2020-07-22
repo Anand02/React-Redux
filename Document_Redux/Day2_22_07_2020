@@ -1,0 +1,139 @@
+REDUX:
+** Redux is a pattern  and library for managing and updating application state
+using events called "actions".
+
+Why Redux:
+Redux helps us to manage state, which is needed across many parts of your 
+application.
+The pattern and tools provided by redux make it easier to understand when,where
+why and how the state in your application is being updated and how application logic
+will behave when those changes occcur
+
+Redux is more useful when
+1. we have large amounts of application state that are needed in many places in tha app.
+2. the app state is updated frequently over time
+3. logic to update state may be complex.
+4. app might be worked on by many people.
+
+REACT-REDUX package that lets our react components interact with a Redux store
+by reading pieces of state and dispatching actions to update the store.
+
+*** Redux DevTools Extension shows a history of the changes to the state 
+in Redux store over time . It allows to debug application effectively ,including 
+using powerful techniqes like "time-travel-debugging". ***
+---------------------------------------------------
+State Management: Exmaple of one- way - data flow
+
+import React,{useState} from 'react';
+function Counter(){
+
+    #1. State : a value
+    const[value , setValue] = useState[0]
+
+    #2. Action: wen user click on increment code cause an update to state
+    const increment = () =>{
+        setValue( a => a+1)
+    }
+    #3 View: UI definition    
+    return (
+        <div>
+        Value:{value} <button onClick={increment}>Increment</button>
+    )
+}
+
+----------------------------------------------------------------------
+However ,the simplicity can breakdown when we have multiple components that 
+need to share and use the same state.
+if those components are located in different parts of the application. sometimes
+this can be solved by "lifting stat up" to parent components
+("In React, sharing state is accomplished by moving it up to the closest common 
+ancestor of the components that need it. This is called “lifting state up”)
+
+ACTIONS:
+An action is a plain javascript oject that has a type field.
+we can say an action as an event that describes something that happened 
+in the application.
+
+type *** SOMETHING IS HAPPENED IN application
+payload: *** ADDITIONAL INFO WHAT HAPPENED 
+
+here type field should be a string that gives this action a name like"todos/todoAdded.
+and it has another field with additional inforamtion about what happened ,
+we put that inforamtion in a field called payload.
+
+Example: 
+const addTodo = {
+    type:'todos/todoAdded',
+    payload:'buu',
+}
+--------------------
+ACTION CREATORS:when we dont have to write the action object by hand every time.
+An action creator is a function that creates and returns an action object.
+Example:
+const addTodo = text => {
+    return {
+        type: 'todos/todoAdded',
+        payload: text
+    }
+}
+
+-------------------------------------------------------------------------
+REDUCERS:
+A reduder is a function that recieves the current state and an action object
+decides how to update the state if necessary and returns the new State
+(state, action) => newState.
+** Reducers should only calculate the new state value based on the state and 
+action arguments
+**Reducers are not allowed to modify the existing state. Instead they must 
+make immutable updates by copying the existing state and making changes to
+the copied values
+
+const initialState = { value = 0 } 
+function counterReducer(state=initialState,action){
+    if(action.type === 'counter/increment'){
+        return {
+            ...state,
+            value: state.value+1
+        }
+    }
+    return state
+}
+-------------------------------------------------------------------------
+Store:
+Redux application state lives in an object called store
+
+The store is created by passing in a reducer, and has a
+ method called getState that returns the current state value:
+
+it has method called getState that returns the current state value
+
+import { configureStore } from '@reduxjs/toolkit'
+
+const store = configureStore({ reducer: counterReducer })
+
+console.log(store.getState())
+
+Dispatch:
+The only way to update the state is to call store.dispatch()
+and pass in an action object. The store will run its reducer function and 
+save new state value inside and we can call getState() to retrive the 
+updated value
+
+const increment = () =>{
+    return {
+        type: 'counter/incremnt'
+    }
+}
+
+store.dispatch(increment())
+-----------------------------------------------------
+Selectors:
+Selectors are functions that know how to extract specific pieces of inforamtion
+from a store state value.
+As an application grows bigger this can help avoid repeating logic as different 
+parts of the app need to read same data
+
+
+
+
+
